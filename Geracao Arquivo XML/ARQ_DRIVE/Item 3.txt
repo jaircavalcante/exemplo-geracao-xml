@@ -1,0 +1,28 @@
+Item 3 - Caracteres acentuados
+Public Function TrocaCaracter(ByRef sParametro As String) As String
+
+Dim ParaSubstituir As String
+Dim Substituto     As String
+Dim I              As Integer
+Dim J              As Integer
+Dim Retorno        As String
+
+    ParaSubstituir = "ÃãÁáÀàÇçÉéÊêÍíÏïÓóÔôÕõÖöÚúÜüÑñ"
+        Substituto = "AaAaAaCcEeEeIiIiOoOoOoOoUuUuNn"
+    
+    Retorno = ""
+    If Len(sParametro) = 0 Then Exit Function
+    
+    For I = 1 To Len(sParametro)
+        J = InStr(ParaSubstituir, Mid$(sParametro, I, 1))
+        If J = 0 Then
+            Retorno = Retorno + Mid$(sParametro, I, 1)
+        Else
+            Retorno = Retorno + Mid$(Substituto, J, 1)
+        End If
+    
+    Next I
+    
+    TrocaCaracter = Retorno
+    
+End Function

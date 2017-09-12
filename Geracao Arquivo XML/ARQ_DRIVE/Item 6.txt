@@ -1,0 +1,19 @@
+Item 6 - Tipos de dados
+Private ksTipoCertificado     As String
+Private ksTipoOperacao        As String 'C/V
+Private ksTipoSistema         As String
+Private klCodigoCarteira      As Long
+Private ksCodigoAtivo         As String
+Private kdDataOperacao        As Date
+Private ksNumeroOperacao      As String
+Private kdDataEmissao         As Date
+Private kdDataVencimento      As Date
+Private kfQuantidade          As Double
+Private kfPU                  As Double
+Private kdDataLiquidacao      As Date
+Private ksMnemonico           As String
+Private kfTaxaJuros           As Double
+Private kiTipoModificador     As Integer
+Private kfValorModificador    As Double
+Private kfFIR                 As Double
+Private kfQuantidadeCCDI      As Double

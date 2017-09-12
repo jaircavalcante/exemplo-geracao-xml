@@ -1,0 +1,43 @@
+Item 5 - Atualizar boleta após geração do arquivo
+Private Sub AtualizarCarteiraDriveOrdem(roclsOperacaoCET As clsOperacoesCET)
+    
+
+    lsSql = _
+    "SELECT * FROM DB2CET.CTRA_DRIV_ORD " & _
+    "WHERE CD_DEPE_GST   = " & oSistema.DependenciaGestora & " " & _
+    "AND DT_MVT          = '" & roclsOperacaoCET.DataMovimento & "' " & _
+    "AND NR_ORD          = " & roclsOperacaoCET.NumeroOrdem
+
+    Set BBRsetCartDriveOrdem = New clsRecordsetBD
+    
+    With BBRsetCartDriveOrdem
+        .bbSource = lsSql
+        .bbCursorLocation = bbadUseServer
+        .bbCursorType = bbadOpenForwardOnly
+        .bbLockType = bbadLockOptimistic
+        Set .bbActiveConnection = oSistema.CA
+
+        .bbOpen
+        
+        If Not .EOF Then
+            !CD_DEPE_GST = oSistema.DependenciaGestora
+            !DT_MVT = roclsOperacaoCET.DataMovimento
+            !NR_ORD = roclsOperacaoCET.NumeroOrdem
+        
+               !IN_OPR_ENV = "S"
+            .bbUpdate
+            
+        ElseIf oSistema.DependenciaGestora = enbbDTVM Then
+            
+            BBRsetCartDriveOrdem.bbAddNew
+            !CD_DEPE_GST = enbbDTVM
+            !DT_MVT = roclsOperacaoCET.DataMovimento
+            !NR_ORD = roclsOperacaoCET.NumeroOrdem
+            !IN_OPR_ENV = "S"
+            !CD_CTRA_DRIV = Null
+            BBRsetCartDriveOrdem.bbUpdate
+        End If
+        
+    End With
+
+Exit Sub

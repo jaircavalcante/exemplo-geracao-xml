@@ -1,0 +1,60 @@
+
+Item 1 - Tela Exportar operações para Drive
+
+With kocolOperacoes
+'FILTROS DA TELA
+        .DataMovimento = Format(dtpDataEstBol.Value, "dd/mm/yyyy")
+        If liMesaGrupo = 0 Then
+            .FiltroMesa = oSistema.SQLMesasdoGrupo
+        Else
+            .FiltroMesa = liMesaGrupo
+        End If
+        
+        If cmbEstadoBoleta.ListIndex > -1 Then
+           .EstadoBoleta = enEstadoBoleta ''cmbEstadoBoleta.ItemData(cmbEstadoBoleta.ListIndex)
+        End If
+        
+        If cmbAtivos.ListIndex > -1 Then
+           .TipoAtivo = enAtivo
+        End If
+        
+        .ConsultaOperacao
+
+'LISTA  
+    With kocolOperacoes
+        For liIdx = 1 To .Count
+            lstOperacoes.ListItems.Add , , Format(.Item(liIdx).NumeroOrdem, "0000")
+            lstOperacoes.ListItems(liIdx).SubItems(1) = Format(.Item(liIdx).DataMovimento, "dd/mm/yyyy")
+            lstOperacoes.ListItems(liIdx).SubItems(2) = IIf(.Item(liIdx).Natureza = cdNatCompra, "C", "V")
+            lstOperacoes.ListItems(liIdx).SubItems(3) = Format(.Item(liIdx).DataLiquidacao, "dd/mm/yyyy")
+            If .Item(liIdx).CodigoCarteiraDrive <> 0 Then
+                lstOperacoes.ListItems(liIdx).SubItems(4) = ObterDescricaoCarteiraDrive(.Item(liIdx).CodigoCarteiraDrive)
+            Else
+                lstOperacoes.ListItems(liIdx).SubItems(4) = ""
+            End If
+            lstOperacoes.ListItems(liIdx).SubItems(5) = Format(.Item(liIdx).DataVencimentoOperacao, "dd/mm/yyyy")
+            lstOperacoes.ListItems(liIdx).SubItems(6) = ObterNomeDependencia(oSistema.CA, .Item(liIdx).CodigoDependenciaGestora) '& "-" & _
+                                                         Space(20) & .Item(liIdx).CodigoDependenciaGestora
+                             
+            lstOperacoes.ListItems(liIdx).SubItems(7) = Format(.Item(liIdx).ValorOperacao, "##,###,###,###,##0.00")
+            lstOperacoes.ListItems(liIdx).SubItems(8) = Format(.Item(liIdx).PrecoUnitarioAtivo, "#,###,###,##0.00######")
+            lstOperacoes.ListItems(liIdx).SubItems(9) = (.Item(liIdx).QuantidadeAtivo)
+            lstOperacoes.ListItems(liIdx).SubItems(10) = Trim(.Item(liIdx).DescricaoTipoAtivo)
+            lstOperacoes.ListItems(liIdx).SubItems(11) = .Item(liIdx).CodigoMCIContraparte
+            lstOperacoes.ListItems(liIdx).SubItems(12) = ObterNomePessoaFiltroMCI(oSistema.CA, .Item(liIdx).CodigoMCIContraparte)
+            'Seleciona o item
+               Listar o estado da boleta pelo nome (incluir coluna)
+            Select Case .Item(liIdx).EstadoBoleta
+                Case cdEstBltIncluida
+                    lstOperacoes.SelectedItem.ForeColor = enCorBoletada
+                Case cdEstBltConfirmado
+                    lstOperacoes.SelectedItem.ForeColor = enCorConfirmada
+                Case cdEstBltEnviadaClearing
+                    lstOperacoes.SelectedItem.ForeColor = enCorEnviadaClearing
+                Case cdEstBltLiquidada
+                    lstOperacoes.SelectedItem.ForeColor = enCorLiquidadaAutomatica
+                Case cdEstBltEnviadoDrive
+                    lstOperacoes.SelectedItem.ForeColor = enCorEnviadaDrive
+            End Select
+        Next
+    End With

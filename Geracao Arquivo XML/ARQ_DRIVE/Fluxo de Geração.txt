@@ -1,0 +1,15 @@
+GERAÇÃO DF ARQUIVO DRIVE
+
+seguem os passos para geração do arquivo da drive:
+
+- Consultar e Exibir Operações de acordo com os filtros no form - conforme item 1;
+- Permitir selecionar as operações para inclusão no arquivo apenas nos estados: liquidadas ou enviada Drive;
+- Preencher as informações para o arquivo - conforme item 2;
+- Substituir caracteres acentuados - conforme item 3;
+- Gravar arquivo XML - conforme item 4;
+- Local do arquivo deve ser selecionado pelo usuário e o default deve ser C:\Temp;
+- O nome do Arquivo: Drive + data invertida + sequencial. O sequencial deve ser obtido conforme item 5;
+- Exemplo do nome do arquivo: c:\Temp\Drive2016_04_18_102913.xml;
+- Arquivo exemplo em anexo.
+- Definição dos tipos de campos - conforme item 6;
+- Constantes utilizadas - conforme item 7.

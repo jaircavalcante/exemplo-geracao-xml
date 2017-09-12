@@ -1,0 +1,31 @@
+Item 8 -Query Carteira Drive
+
+    sSql = " SELECT CD_FNDO , " & _
+           "        CD_EMP_GST , " & _
+           "        CD_NTZ , " & _
+           "        IN_FNDO_LQDZ , " & _
+           "        CD_FNDO_GFI , " & _
+           "        CD_FNDO_DRIV, " & _
+           "        CD_PRF_DEPE_FNDO, " & _
+           "        NR_CC_FNDO, " & _
+           "        CD_TIP_FNDO " & _
+           " FROM   DB2ACF.FNDO " & _
+           " WHERE  CD_FNDO = " & mvarCodigoFundo
+    rs.bbOpen sSql, mvarCA, bbadOpenForwardOnly
+    
+    If Not rs.EOF Then
+        Abrir = True
+        mvarCodigoEmpresaGestora = rs.Fields("CD_EMP_GST")
+        mvarCodigoFundoDrive = rs.Fields("CD_FNDO_DRIV")
+        mvarCodigoFundoGFI = rs.Fields("CD_FNDO_GFI")
+        If rs.Fields("IN_FNDO_LQDZ") = "S" Then
+            mvarIndicadorFundoLiquidez = True
+        Else
+            mvarIndicadorFundoLiquidez = False
+        End If
+        
+        mvarCodigoNatureza = rs.Fields("CD_NTZ")
+        mvarCodigoPrefixoDependenciaFundo = rs.Fields("CD_PRF_DEPE_FNDO")
+        mvarNumeroContaCorrenteFundo = rs.Fields("NR_CC_FNDO")
+        mvarCodigoTipoFundo = rs.Fields("CD_TIP_FNDO")
+    End If

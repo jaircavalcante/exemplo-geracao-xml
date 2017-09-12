@@ -1,0 +1,51 @@
+Item 2 - Dados da Boleta
+With lstOperacoes.ListItems
+
+        For liIdx = 1 To .Count
+            If .Item(liIdx).Checked Then
+                liContChecado = liContChecado + 1
+                koDados.CodigoAtivo = kocolOperacoes.Item(liIdx).NomeAtivo
+                
+                '----- Tratamento para Empresa Operadora ---------------
+                If oSistema.DependenciaGestora <> cdDepeGestBBDTVM Then
+                   koDados.CodigoCarteira = kocolOperacoes.Item(liIdx).CodigoCarteiraDrive  'quando não é BB-DTVM
+                Else
+                   '-- Somente para Depeendencia Gestora = BBDTVM ---------
+                    koFundo.CodigoEmpresaGestora = cdDepeGestBBDTVM
+                    koFundo.CodigoFundo = kocolOperacoes.Item(liIdx).CodigoParticipante
+                    koFundo.Abrir          'Quando for BBDTVM deve-se consultar pelo código do participante (USAR QUERY conforme item 8)
+                    koDados.CodigoCarteira = koFundo.CodigoFundoDrive
+                End If
+                '--------------------------------------------------------------
+                
+                koDados.DataEmissao = kocolOperacoes.Item(liIdx).DataEmissaoAtivo
+                koDados.DataLiquidacao = kocolOperacoes.Item(liIdx).DataLiquidacao
+                koDados.DataOperacao = kocolOperacoes.Item(liIdx).DataMovimento
+                koDados.DataVencimento = kocolOperacoes.Item(liIdx).DataVencimentoAtivo
+                                
+                'O sistema não tem informações sobre se o ativo é pré ou pós. Por isso esta
+                'informação não poderá ser repassada - vai ficar um valor fixo.
+                koDados.FIR = 0
+                koDados.TipoCertificado = 0
+                koDados.TaxaJuros = 0
+                koDados.TipoModificador = enMultiplicativo     ' **** Const enMultiplicativo          As Integer = 1
+                koDados.ValorModificador = 0
+                koDados.Mnemonico = kocolOperacoes.Item(liIdx).PessoaParticipante.NomeMnemonico
+                koDados.NumeroOperacao = kocolOperacoes.Item(liIdx).NumeroOrdem
+                koDados.PU = kocolOperacoes.Item(liIdx).PrecoUnitarioAtivo
+                koDados.Quantidade = kocolOperacoes.Item(liIdx).QuantidadeAtivo
+                'o Tipo da operação na classe dados é a natureza da operação no CET
+                koDados.TipoOperacao = IIf(kocolOperacoes.Item(liIdx).Natureza = cdNatCompra, "C", "V")
+                koDados.TipoSistema = kocolOperacoes.Item(liIdx).SistemaCETIPDrive
+                'total na tag QtCCDI quando for compra e 0 (zero) quando for venda, enquanto o estoque não
+                'contemplar a DTVM
+                koDados.QuantidadeCCDI = IIf(kocolOperacoes.Item(liIdx).Natureza = cdNatCompra, kocolOperacoes.Item(liIdx).QuantidadeAtivo, 0)
+                koDados.AteVencimento = kocolOperacoes.Item(liIdx).IndicadorPermanenciaAteVencimento
+                koDados.CodigoCetipContraparte = kocolOperacoes.Item(liIdx).ContaCetipContraparteComDV
+        
+                Call koExporta.Add(koDados)
+        
+            End If
+        Next
+    
+    End With

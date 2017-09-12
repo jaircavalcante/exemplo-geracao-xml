@@ -1,0 +1,129 @@
+Item 4 - TAGs do Arquivo
+
+Public Sub GeraArquivoXML()
+    Dim llCnt           As Long
+    Dim lsTipoOperacao  As String
+    
+    Print #kiNumArquivo, "<" & csConstante1 & ">"
+    Print #kiNumArquivo, "<" & csConstante2 & ">"
+    
+    'Linha em branco
+    Print #kiNumArquivo, csLinhaBranco
+    Print #kiNumArquivo, "<" & csRaiz & ">"
+    
+    'Linha em branco
+    Print #kiNumArquivo, csLinhaBranco
+    
+    For llCnt = 1 To Count
+        With koCollection(llCnt)
+            lsTipoOperacao = IIf((UCase(Mid(.TipoOperacao, 1, 1)) = "C"), "Compra", "Venda")
+             
+            Print #kiNumArquivo, "<" & csNivel1 & lsTipoOperacao & ">"
+            'Linha em branco
+            Print #kiNumArquivo, csLinhaBranco
+            
+            Print #kiNumArquivo, "<" & csNivel2 & ">" 'BoletaCETIP
+            
+            '<< DE 95105 - em 25.05.2011 por Geraldo G Goretti  >>
+            'Print #kiNumArquivo, "<" & csTipoSistema & ">" & .TipoSistema & _
+                                 "</" & csTipoSistema & ">"
+            Print #kiNumArquivo, "<" & csTipoSistema & ">" & TrocaCaracter(.TipoSistema) & _
+                                 "</" & csTipoSistema & ">"
+            '<< Fim DE 95105 >>
+            
+            Print #kiNumArquivo, "<" & csCodigoCarteira & ">" & .CodigoCarteira & _
+                                 "</" & csCodigoCarteira & ">"
+            Print #kiNumArquivo, "<" & csCodigoAtivo & ">" & .CodigoAtivo & _
+                                 "</" & csCodigoAtivo & ">"
+            
+            '<< DE 95105 - em 25.05.2011 por Geraldo G Goretti  >>
+            'Print #kiNumArquivo, "<" & csMnemonico & ">" & Trim(.Mnemonico) & _
+                                 "</" & csMnemonico & ">"
+            Print #kiNumArquivo, "<" & csMnemonico & ">" & TrocaCaracter(Trim(.Mnemonico)) & _
+                                 "</" & csMnemonico & ">"
+            '<< Fim DE 95105 >>
+            
+            Print #kiNumArquivo, "<" & csDataOperacao & ">" & Format(.DataOperacao, "YYYYMMDD") & _
+                                 "</" & csDataOperacao & ">"
+            Print #kiNumArquivo, "<" & csNumeroOperacao & ">" & .NumeroOperacao & _
+                                 "</" & csNumeroOperacao & ">"
+            Print #kiNumArquivo, "<" & csDataEmissao & ">" & Format(.DataEmissao, "YYYYMMDD") & _
+                                 "</" & csDataEmissao & ">"
+            Print #kiNumArquivo, "<" & csDataVencimento & ">" & Format(.DataVencimento, "YYYYMMDD") & _
+                                 "</" & csDataVencimento & ">"
+            Print #kiNumArquivo, "<" & csQuantidade & ">" & .Quantidade & _
+                                 "</" & csQuantidade & ">"
+            Print #kiNumArquivo, "<" & csPU & ">" & .PU & _
+                                 "</" & csPU & ">"
+            Print #kiNumArquivo, "<" & csDataLiquidacao & ">" & Format(.DataLiquidacao, "YYYYMMDD") & _
+                                 "</" & csDataLiquidacao & ">"
+            Print #kiNumArquivo, "<" & csQtdCCDI & ">" & .QuantidadeCCDI & "</" & csQtdCCDI & ">"
+            
+            'PJr - DE11429 - 12/04/2012
+            Print #kiNumArquivo, "</" & csNivel2 & ">"  'Fecha BoletaCETIPs
+            
+            If lsTipoOperacao = "Venda" Then
+                'PJr - DE106978 - 02/08/2011 - Indicador Circular 3086(Manter Ate Vencimento)
+                Print #kiNumArquivo, "<" & csAteVenc & ">" & .AteVencimento & _
+                         "</" & csAteVenc & ">"
+    
+                            ''PJr - DE_111429 Acao 87063 - 22/02/2012
+                Print #kiNumArquivo, "<" & csCodCETIPContaparte & ">" & .CodigoCetipContraparte & _
+                                     "</" & csCodCETIPContaparte & ">"
+    
+                '''Print #kiNumArquivo, "</" & csNivel2 & ">"  'Fecha BoletaCETIPs
+            End If
+            
+            'Linha em branco
+            Print #kiNumArquivo, csLinhaBranco
+            
+            If lsTipoOperacao = "Compra" Then
+                If .TaxaJuros > 0 Then
+                    Print #kiNumArquivo, "<" & csTaxaJuros & ">" & .TaxaJuros & _
+                                         "</" & csTaxaJuros & ">"
+                End If
+
+                If .TipoCertificado <> 1 Then  '1=pré
+                    Print #kiNumArquivo, "<" & csTipoModificador & ">" & .TipoModificador & _
+                                         "</" & csTipoModificador & ">"
+                    If .ValorModificador > 0 Then
+                        Print #kiNumArquivo, "<" & csValorModificador & ">" & .ValorModificador & _
+                                             "</" & csValorModificador & ">"
+                    End If
+
+                End If
+                If .FIR > 0 Then
+                    Print #kiNumArquivo, "<" & csFIR & ">" & .FIR & _
+                                         "</" & csFIR & ">"
+                End If
+                
+                ''PJr - DE106978 - 12/04/2012 - Indicador Circular 3086(Manter Ate Vencimento)
+                Print #kiNumArquivo, "<" & csAteVenc & ">" & .AteVencimento & _
+                         "</" & csAteVenc & ">"
+                
+                ''PJr - DE_111429 Acao 87063 - 12/04/2012
+                Print #kiNumArquivo, "<" & csCodCETIPContaparte & ">" & .CodigoCetipContraparte & _
+                                     "</" & csCodCETIPContaparte & ">"
+                
+           End If
+            
+            Print #kiNumArquivo, "</" & csNivel1 & lsTipoOperacao & ">"  'Fecha Compra/Venda
+            
+            'Linhas em branco
+            Print #kiNumArquivo, csLinhaBranco
+            Print #kiNumArquivo, csLinhaBranco
+        End With
+    Next
+    
+    'Linha em branco
+    Print #kiNumArquivo, csLinhaBranco
+
+    Print #kiNumArquivo, "</" & csRaiz & ">"
+
+    Close kiNumArquivo
+    
+    While koCollection.Count > 0
+        koCollection.Remove 1
+    Wend
+    
+End Sub

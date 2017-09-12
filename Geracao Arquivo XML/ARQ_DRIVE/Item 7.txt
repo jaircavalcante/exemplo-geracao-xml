@@ -1,0 +1,48 @@
+Item 7 - Constantes 
+Public Enum enEmpresa
+    enbbBB = -1
+    enbbDTVM = -2
+    enbbBI = 11150
+    enbbBPB = 0
+End Enum
+
+Public Enum enTipoArquivo
+    enArquivoCETIP = 100
+    enArquivoDEB = 200
+    enArquivoDRIVE = 300
+    enArquivoRisco = 400
+    enArquivoAPCETIP = 500
+    enArquivoRDO = 600
+    
+    'PJr - Dem108496 - 06/02/2014
+    enArquivoISINCetip21 = 700
+    enArquivoSolicitacaoISIN = 800
+End Enum
+
+Public Enum enCetTipoAtivo
+    cdAtivoJSTN = 1
+    cdAtivoTDA = 2
+    cdAtivoMOP = 3
+    cdAtivoDebenture = 4
+    cdAtivoCTEE = 5
+    cdAtivoLH = 6
+    cdAtivoNP = 7
+    cdAtivoCotaFndoSCF = 8
+    cdAtivoLCI = 9
+    cdAtivoASTN = 10
+    cdCertificados = 11
+    cdAtivoFIDC = 13
+    cdAtivoCPR = 14
+    cdAtivoCDCA = 15
+    cdAtivoCCB = 16
+    cdAtivoCotaFndoSCFDTVM = 17
+    cdAtivoLF = 18
+    cdAtivoCRI = 19
+    cdAtivoCCI = 20
+    cdAtivos_LH = 22
+    cdAtivoNC = 23
+    cdAtivoCRA = 24
+            
+End Enum
+
+Const enMultiplicativo          As Integer = 1
